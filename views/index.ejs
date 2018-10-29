@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/layui/css/layui.css' />
+      <title>首页 </title>
+      <link rel="stylesheet" href="/divcss/frame/layui/css/layui.css">
+      <link rel="stylesheet" href="/divcss/frame/static/css/style.css">
+      <link rel="icon" href="/divcss/frame/static/image/code.png">
+      <script type="text/javascript"  src="/js/tripledes.js"></script>
+      <script type="text/javascript"  src="/js/core.js"></script>
+      <script type="text/javascript"  src="/js/var.js"></script>
+      <script type="text/javascript"  src="/js/mode-ecb.js"></script>
+      <script type="text/javascript"  src="/js/jquery-1.11.1.min.js"></script>
+      <script type="text/javascript"  src="/funs/myfuns.js"></script>
+      <script type="text/javascript"  src="/funs/ajax.js"></script>
+
+  </head>
+  <body>
+  <blockquote class="layui-elem-quote layui-text">
+      使用注意事项:</br>
+      1.该工具用于产生停机工具单机版的软件注册码文件. </br>
+      2.输入使用电脑的mac地址,注意格式,点击即可产生SN软件授权文件,拷贝至电脑引入软件即可.
+  </blockquote>
+
+
+  <div class="layui-form-item">
+      <label class="layui-form-label">MAC地址:</label>
+      <div class="layui-input-block">
+          <input type="text" name="textMac" id="textMac" autocomplete="off"  placeholder="参考格式:  00-01-02-03-04-05注意删除前后空格" class="layui-input" /></p>
+      </div>
+  </div>
+
+  <div class="layui-form-item">
+      <label class="layui-form-label">SN:</label>
+      <div class="layui-input-block">
+          <input type="text" name="textSN" id="textSN" autocomplete="off"  placeholder="秘钥计算成功后，会显示在此处" class="layui-input" /></p>
+      </div>
+  </div>
+
+
+  <div class="layui-input-block">
+      <button type="button" class="layui-btn" name="SNCreate" id="SNCreate">计算软件注册码</button>
+
+  </div>
+
+  <script type="text/javascript">
+
+
+
+  $('#SNCreate').off("click").on("click",function(){
+     var url="/test";
+     var data={UID:"1"};
+
+      ajaxpost(url,data,);
+  // var textMac=$("#textMac").val();
+  // var checkmac=checkMac(textMac);
+  // if(checkmac){
+  // var FMMac=FM(textMac);
+  // mssn=encryptMac();
+  //     $("#textSN").val(mssn);
+  // }
+  })
+</script>
+
+  </body>
+</html>

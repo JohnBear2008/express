@@ -1,0 +1,183 @@
+<div class="navbar-default sidebar" role="navigation">
+    <div class="sidebar-nav navbar-collapse">
+        <ul class="nav" id="side-menu">
+
+            <li class="sidebar-search">
+                <div class="input-group custom-search-form">
+                    <input type="text" class="form-control" placeholder="Search...">
+                    <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <!--<i class="fa fa-search"></i>-->
+                                    搜索
+
+                                </button>
+                            </span>
+                </div>
+                <!-- /input-group -->
+            </li>
+
+
+            <!--<li>-->
+                <!--<a href="/users/?url=index"><i class="fa fa-dashboard fa-fw"></i> 面板</a>-->
+            <!--</li>-->
+            <!--<li>-->
+                <!--<a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> 用户中心<span class="fa arrow"></span></a>-->
+                <!--<ul class="nav nav-second-level">-->
+                    <!--<li>-->
+                        <!--<a href="/users/?url=blank3">Flot 图表</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="morris.html">Morris.js 图表</a>-->
+                    <!--</li>-->
+                <!--</ul>-->
+                <!--&lt;!&ndash; /.nav-second-level &ndash;&gt;-->
+            <!--</li>-->
+            <!--<li>-->
+                <!--<a href="/users/?url=tables"><i class="fa fa-table fa-fw"></i> 表格</a>-->
+            <!--</li>-->
+            <!--<li>-->
+                <!--<a href="forms.html"><i class="fa fa-edit fa-fw"></i> 表单</a>-->
+            <!--</li>-->
+            <!--<li>-->
+                <!--<a href="#"><i class="fa fa-sitemap fa-fw"></i>多级下拉<span class="fa arrow"></span></a>-->
+                <!--<ul class="nav nav-second-level">-->
+                    <!--<li>-->
+                        <!--<a href="#">二级下拉项</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="#">二级下拉项</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="#">三级 <span class="fa arrow"></span></a>-->
+                        <!--<ul class="nav nav-third-level">-->
+                            <!--<li>-->
+                                <!--<a href="#">三级下拉项</a>-->
+                            <!--</li>-->
+                            <!--<li>-->
+                                <!--<a href="#">三级下拉项</a>-->
+                            <!--</li>-->
+                            <!--<li>-->
+                                <!--<a href="#">三级下拉项</a>-->
+                            <!--</li>-->
+                            <!--<li>-->
+                                <!--<a href="#">三级下拉项</a>-->
+                            <!--</li>-->
+                        <!--</ul>-->
+                        <!--&lt;!&ndash; /.nav-third-level &ndash;&gt;-->
+                    <!--</li>-->
+                <!--</ul>-->
+                <!--&lt;!&ndash; /.nav-second-level &ndash;&gt;-->
+            <!--</li>-->
+
+        </ul>
+
+        <ul class="nav" id="divnav">
+
+        </ul>
+
+        <script>
+            $(function() {
+                $('#side-menu').metisMenu();
+            });
+
+            //Loads the correct sidebar on window load,
+            //collapses the sidebar on window resize.
+            // Sets the min-height of #page-wrapper to window size
+            $(function() {
+                $(window).bind("load resize", function() {
+                    var topOffset = 50;
+                    var width = (this.window.innerWidth > 0) ? this.window.innerWidth : this.screen.width;
+                    if (width < 768) {
+                        $('div.navbar-collapse').addClass('collapse');
+                        topOffset = 100; // 2-row-menu
+                    } else {
+                        $('div.navbar-collapse').removeClass('collapse');
+                    }
+
+                    var height = ((this.window.innerHeight > 0) ? this.window.innerHeight : this.screen.height) - 1;
+                    height = height - topOffset;
+                    if (height < 1) height = 1;
+                    if (height > topOffset) {
+                        $("#page-wrapper").css("min-height", (height) + "px");
+                    }
+                });
+
+                var url = window.location;
+                alert(url);
+                // var element = $('ul.nav a').filter(function() {
+                //     return this.href == url;
+                // }).addClass('active').parent().parent().addClass('in').parent();
+                var element = $('ul.nav a').filter(function() {
+                    return this.href == url;
+                }).addClass('active').parent();
+
+                while (true) {
+                    if (element.is('li')) {
+                        element = element.parent().addClass('in').parent();
+                    } else {
+                        break;
+                    }
+                }
+            });
+
+
+            $(function () {
+                var url="getleftnav";
+                var treeID="";
+                // var data={treelevel:"0"};
+                $.ajax({
+                    url:url, //后台查询的ACTION
+                    type:'get',//POST方式传递参数从前端到后台
+                    dataType:'json',//数据类型为JSON
+                    data:"",//传输的数据
+                    success:function(res){
+                         // alert(JSON.stringify(res));
+
+                        // alert(res[0].FID);
+                        // alert(res[1].name);
+                        var i=0;
+                        while(i<res.length){
+                            // alert(res[i].treeID);
+                            $('#side-menu').append('<li id='+res[i].treeID+'><a href="/users/?url='+res[i].url+'&treeID='+res[i].treeID+'"><i class="fa fa-dashboard fa-fw"></i> '+res[i].name+'</a></li> ');
+                            i++;
+                            $('#side-menu').append('<li id="test"><a href="#"><i class="fa fa-dashboard fa-fw"></i> test</a></li> ');
+
+                            $("#test").addClass('active').parent();
+                        }
+                        // $("#res[i].treeID").addClass('active');
+
+
+                        // for(var i=0;i<res.length;i++){
+                        //
+                        //     // alert(res[i].name);
+                        //     $('#side-menu').append('<li id='+res[i].url+'><a href="/users/?url='+res[i].url+'&treeID='+res[i].treeID+'"><i class="fa fa-dashboard fa-fw"></i> '+res[i].name+'</a></li> ');
+                        //
+                        //     // if(res[i].withCtree==""){
+                        //     //     // alert(res[i].FtreeID+"weikk");
+                        //     //     $('#divnav').append('<li><a href="/users/?url='+res[i].url+'"><i class="fa fa-dashboard fa-fw"></i> '+res[i].name+'</a></li> ');
+                        //     //
+                        //     // }else{
+                        //     //     // alert(res[i].FtreeID+"222222");
+                        //     //     $('#divnav').append('<li><a href="#"><i class="fa fa-dashboard fa-fw"></i> '+res[i].name+'<span class="fa arrow"></span></a><ul class="nav nav-second-level" id="Ctree'+res[i].treeID+'"><li>\n' +
+                        //     //         '                        <a href="/users/?url=blank3">Flot 图表</a>\n' +
+                        //     //         '                    </li></ul></li> ');
+                        //     // }
+                        //
+                        // }
+
+                    },
+                    error:function(){//这里是AJAX发生错误的处理代码
+                        alert("系统异常！",'error');
+                    }
+                });
+
+
+            })
+        </script>
+
+    </div>
+    <!-- /.sidebar-collapse -->
+</div>
+<!-- /.navbar-static-side -->
+</nav>
+

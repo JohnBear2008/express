@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>表单</title>
+    <link rel="stylesheet" href="../frame/layui/css/layui.css">
+
+
+</head>
+<body class="body">
+
+  <div class="layui-inline">
+            <label class="layui-form-label">验证日期</label>
+            <div class="layui-input-inline">
+                <input type="text" name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+      
+
+
+<script src="../frame/layui/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['form','layedit', 'laydate'], function(){
+        var form = layui.form
+                ,layer = layui.layer
+                ,layedit = layui.layedit
+                ,laydate = layui.laydate;
+
+        //日期
+        laydate.render({
+            elem: '#date'
+        });
+        laydate.render({
+            elem: '#date1'
+        });
+
+        //创建一个编辑器
+       
+
+    });
+</script>
+</body>
+</html>

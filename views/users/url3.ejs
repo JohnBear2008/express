@@ -1,0 +1,71 @@
+<!-- Page Content -->
+<div id="page-wrapper">
+
+3333333333333333333333333333
+    <button class="btn btn-default" id="addbar" type="button">
+        <!--<i class="fa fa-search"></i>-->
+        添加
+
+    </button>
+
+    <button class="btn btn-default" id="gettree" type="button">
+        <!--<i class="fa fa-search"></i>-->
+        获取数据
+
+    </button>
+
+
+</div>
+
+
+<script>
+
+    $("#addbar").click(function(){
+        // alert("1111111");
+        // $("#divul").append("<li>" + "111111111" +"</li>");
+        $('#divnav').append('<li><a href="/users/?url=blank2">'+"测试功能"+'</a></li> ');
+    });
+
+    $("#gettree").click(function(){
+
+        var url="getleft";
+        var data={treelevel:"0"};
+        $.ajax({
+            url:url, //后台查询的ACTION
+            type:'post',//POST方式传递参数从前端到后台
+            dataType:'json',//数据类型为JSON
+            data:data,//传输的数据
+            success:function(res){
+                // alert(JSON.stringify(res));
+
+                // alert(res[0].FID);
+                // alert(res[1].name);
+                for(var i=0;i<res.length;i++){
+                    // alert(res[i].name);
+                    $('#divnav').append('<li><a href="/users/?url='+res[i].url+'"><i class="fa fa-dashboard fa-fw"></i> '+res[i].name+'</a></li> ');
+
+                    // if(res[i].withCtree==""){
+                    //     // alert(res[i].FtreeID+"weikk");
+                    //     $('#divnav').append('<li><a href="/users/?url='+res[i].url+'"><i class="fa fa-dashboard fa-fw"></i> '+res[i].name+'</a></li> ');
+                    //
+                    // }else{
+                    //     // alert(res[i].FtreeID+"222222");
+                    //     $('#divnav').append('<li><a href="#"><i class="fa fa-dashboard fa-fw"></i> '+res[i].name+'<span class="fa arrow"></span></a><ul class="nav nav-second-level" id="Ctree'+res[i].treeID+'"><li>\n' +
+                    //         '                        <a href="/users/?url=blank3">Flot 图表</a>\n' +
+                    //         '                    </li></ul></li> ');
+                    // }
+
+                }
+
+            },
+            error:function(){//这里是AJAX发生错误的处理代码
+                alert("系统异常！",'error');
+            }
+        });
+
+        // $("#divul").append("<li>" + "111111111" +"</li>");
+        // $('#divnav').append('<li><a href="/users/?url=blank2">'+"test1"+'</a></li> ');
+    });
+
+</script>
+<!-- /#page-wrapper -->

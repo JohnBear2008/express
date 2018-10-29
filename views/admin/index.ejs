@@ -1,0 +1,220 @@
+<html>
+
+
+<title>Bear Admin 登陆页面</title>
+
+<!-- Bootstrap Core CSS -->
+<link href="/theme/bootstrap/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- MetisMenu CSS -->
+<link href="/theme/bootstrap/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+<!-- Custom CSS -->
+<link href="/theme/bootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+
+<!-- Custom Fonts -->
+<link href="/theme/bootstrap/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<script type="text/javascript"  src="/funs/ajax.js"></script>
+<!-- jQuery -->
+<script src="/theme/bootstrap/vendor/jquery/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/theme/bootstrap/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="/theme/bootstrap/vendor/metisMenu/metisMenu.min.js"></script>
+
+<script src="/theme/bootstrap/vendor/datatables/js/jquery.dataTables.min.js"></script>
+<script src="/theme/bootstrap/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+<script src="/theme/bootstrap/vendor/datatables-responsive/dataTables.responsive.js"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!--<script>-->
+        <!--$(document).ready(function() {-->
+            <!--$('#dataTables-example').DataTable({-->
+                <!--responsive: true-->
+            <!--});-->
+        <!--});-->
+    <!--</script>-->
+    <%= title %>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">功能列表</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+
+        </div>
+        <!-- /.row -->
+        <div class="row">
+
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading" align="right">
+                        <button class='btn btn-default' id='addfun' type='button'>添加功能 </button>
+                        <a href="/logout"><button class='btn btn-default' id='logoutbutton' type='button'>退出系统 </button></a>
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                            <thead>
+                            <tr>
+                                <th>功能ID</th>
+                                <th>功能名称</th>
+                                <th>功能url</th>
+                                <th>权限级别</th>
+                                <th>树级别</th>
+                                <th>是否有子树</th>
+                                <th>父树ID</th>
+                                <th>工具栏</th>
+                            </tr>
+                            </thead>
+                            <tbody id="funstr">
+                            <!--<tr >-->
+                                <!--<td>Trident</td>-->
+                                <!--<td>Internet Explorer 4.0</td>-->
+                                <!--<td>Win 95+</td>-->
+                                <!--<td class="center">4</td>-->
+                                <!--<td class="center">X</td>-->
+                            <!--</tr>-->
+                            <!--<tr >-->
+                                <!--<td>Trident</td>-->
+                                <!--<td>Internet Explorer 5.0</td>-->
+                                <!--<td>Win 95+</td>-->
+                                <!--<td class="center">5</td>-->
+                                <!--<td class="center">C</td>-->
+                            <!--</tr>-->
+                            <!--<tr >-->
+                                <!--<td>Trident</td>-->
+                                <!--<td>Internet Explorer 5.5</td>-->
+                                <!--<td>Win 95+</td>-->
+                                <!--<td class="center">5.5</td>-->
+                                <!--<td class="center">A</td>-->
+                            <!--</tr>-->
+                            <!--<tr >-->
+                                <!--<td>Trident</td>-->
+                                <!--<td>Internet Explorer 6</td>-->
+                                <!--<td>Win 98+</td>-->
+                                <!--<td class="center">6</td>-->
+                                <!--<td class="center">A</td>-->
+                            <!--</tr>-->
+
+                            </tbody>
+                        </table>
+                        <!-- /.table-responsive -->
+
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+
+
+    <!-- /#page-wrapper -->
+</div>
+<script>
+
+
+    $(function () {
+
+        //定义添加功能按钮
+        $("#addfun").click(function(){
+            window.location.href="addfun";
+
+        })
+        
+        
+        function delfun(FID) {
+            $.ajax({
+                url:"delfun", //后台查询的ACTION
+                type:'post',//POST方式传递参数从前端到后台
+                dataType:'json',//数据类型为JSON
+                data:{FID:FID},//传输的数据
+                success:function(res){
+                    // alert(JSON.stringify(res));
+                    // alert(res[0].UID);
+                    if(res !=null  && res !="" ){
+                        // alert("删除成功!");
+                        alert(res);
+
+                    }else{
+                        alert("删除失败,请检查!");
+                    }
+                },
+                error:function(err){//这里是AJAX发生错误的处理代码
+                    alert(JSON.stringify(err));
+                }
+            });
+
+        }
+
+
+
+        // var url="getfunctions";
+        var url="getfunctions"+"?"+Math.random();//添加随机数解决IE 因缓存加载数据延迟bug
+
+        // var data={treelevel:"0"};
+
+        $.ajax({
+            url:url, //后台查询的ACTION
+            type:'get',//POST方式传递参数从前端到后台
+            dataType:'json',//数据类型为JSON
+            data:"",//传输的数据
+            // async:false,//取消异步 否则选中效果无法加载!
+            success:function(res){
+                // alert(JSON.stringify(res));
+                var $str="";
+                var i=0;
+                while(i<res.length){
+
+                    $str+="<tr align='center'>";
+                    $str+="<td>"+res[i].treeID+"</td>";
+                    $str+="<td>"+res[i].name+"</td>";
+                    $str+="<td>"+res[i].url+"</td>";
+                    $str+="<td>"+res[i].authlevel+"</td>";
+                    $str+="<td>"+res[i].treelevel+"</td>";
+                    $str+="<td>"+res[i].withCtree+"</td>";
+                    $str+="<td>"+res[i].FtreeID+"</td>";
+                    $str+="<td><a href='updfun?FID="+res[i].FID+"'><button class='btn btn-default' id='updatefun' type='button'>更新 </button></a> <a href='delfun?FID="+res[i].FID+"'><button class='btn btn-default' type='button' >删除 </button></a></td>";
+                    // $str+="<td onClick='getDel(this)'><a href='#'>删除追加</a></td>";
+                    $str+="</tr>";
+                    i++;
+                }
+
+                $("#funstr").append($str);
+//---重新定义表格控件----------------
+                $('#dataTables-example').DataTable({
+                    responsive: true
+                });
+
+            },
+            error:function(){//这里是AJAX发生错误的处理代码
+                alert("系统异常！",'error');
+            }
+
+        });
+
+    })
+
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/layui/css/layui.css' />
+      <title>首页 </title>
+      <link rel="stylesheet" href="/divcss/frame/layui/css/layui.css">
+      <link rel="stylesheet" href="/divcss//frame/static/css/style.css">
+      <link rel="icon" href="/divcss/frame/static/image/code.png">
+      <script type="text/javascript"  src="/js/tripledes.js"></script>
+      <script type="text/javascript"  src="/js/core.js"></script>
+      <script type="text/javascript"  src="/js/var.js"></script>
+      <script type="text/javascript"  src="/js/mode-ecb.js"></script>
+      <script type="text/javascript"  src="/js/jquery-1.11.1.min.js"></script>
+
+  </head>
+  <body>
+  <blockquote class="layui-elem-quote layui-text">
+      使用注意事项:</br>
+      1.该工具用于产生停机工具单机版的软件注册码文件. </br>
+      2.输入使用电脑的mac地址,注意格式,点击即可产生SN软件授权文件,拷贝至电脑引入软件即可.
+  </blockquote>
+
+
+
+  <div class="layui-form-item">
+      <label class="layui-form-label">MAC地址:</label>
+      <div class="layui-input-block">
+          <input type="text" name="textMac" id="textMac" autocomplete="off"  placeholder="参考格式:  00-01-02-03-04-05注意删除前后空格" class="layui-input" /></p>
+      </div>
+  </div>
+
+  <div class="layui-form-item">
+      <label class="layui-form-label">SN:</label>
+      <div class="layui-input-block">
+          <input type="text" name="textSN" id="textSN" autocomplete="off"  placeholder="秘钥计算成功后，会显示在此处" class="layui-input" /></p>
+      </div>
+  </div>
+
+
+  <div class="layui-input-block">
+      <button type="button" class="layui-btn" name="SNCreate" id="SNCreate">计算软件注册码</button>
+
+  </div>
+
+  <script type="text/javascript">
+  function FM(textMac){
+  textMac=textMac.replace(/-/g, "");
+  textMac=textMac.replace(/:/g, "");
+  return textMac;
+  }
+
+
+
+  $('#SNCreate').off("click").on("click",function(){
+
+
+  var textMac=$("#textMac").val();
+  var checkmac=checkMac(textMac);
+
+  if(checkmac){
+
+
+  var FMMac=FM(textMac);
+
+  mssn=encryptMac();
+      $("#textSN").val(mssn);
+
+
+  }
+
+
+  })
+
+  //校验Mac地址格式
+  function checkMac(macaddr){
+  var reg1 = /^[A-Fa-f0-9]{1,2}\-[A-Fa-f0-9]{1,2}\-[A-Fa-f0-9]{1,2}\-[A-Fa-f0-9]{1,2}\-[A-Fa-f0-9]{1,2}\-[A-Fa-f0-9]{1,2}$/;
+  var reg2 = /^[A-Fa-f0-9]{1,2}\:[A-Fa-f0-9]{1,2}\:[A-Fa-f0-9]{1,2}\:[A-Fa-f0-9]{1,2}\:[A-Fa-f0-9]{1,2}\:[A-Fa-f0-9]{1,2}$/;
+  if (reg1.test(macaddr)) {
+  return true;
+  } else if (reg2.test(macaddr)) {
+  return true;
+  } else {
+
+  alert("你输入的MAC地址不正确,请检查,按照参考格式输入!");
+  return false;
+  }
+  }
+
+
+
+
+  eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)d[e(c)]=k[c]||e(c);k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1;};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p;}('2 7(3){1 4=0.d.9.a(i);1 6=0.h.g(3,4,{5:0.5.f,e:0.o.n});8 6.q.p()}2 k(){1 b=j($("#m").l());1 c=7(0.d.9.a(b));8 c}',27,27,'CryptoJS|var|function|message|keyHex|mode|encrypted|encryptByDESModeEBC|return|Utf8|parse|source|cc|enc|padding|ECB|encrypt|DES|SNKey|FM|encryptMac|val|textMac|Pkcs7|pad|toString|ciphertext'.split('|'),0,{}))
+  </script>
+
+  </body>
+</html>

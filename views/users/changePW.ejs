@@ -1,0 +1,73 @@
+<!-- Page Content -->
+<div id="page-wrapper">
+
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="login-panel panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">修改账号登陆密码</h3>
+                </div>
+                <div class="panel-body">
+                    <form role="form">
+                        <fieldset>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="输入密码" name="password1" id="password1" type="password" autofocus>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="再次输入" name="password2" id="password2" type="password" value="">
+                            </div>
+
+                            <!-- Change this to a button or input when using this as a form -->
+                            <a id="changPWbutton" class="btn btn-lg btn-success btn-block" type="button">确认修改</a>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /#page-wrapper -->
+<script>
+
+    //验证修改密码输入合法性
+    function getchangePW() {
+        var password1=$('#password1').val();
+        var password2=$('#password2').val();
+        if((password1==password2)&&(password1!="")){
+            return true;
+        }else{
+            alert("密码不能为空,且两次输入必须相同!");
+            return false;
+        }
+    }
+
+    //定义按钮
+    $("#changPWbutton").click(function(){
+
+        if(getchangePW()){
+            var PW=$('#password1').val();
+            $.ajax({
+                url:"/postchangePW", //后台查询的ACTION
+                type:'post',//POST方式传递参数从前端到后台
+                dataType:'json',//数据类型为JSON
+                data:{PW:PW},//传输的数据
+                success:function(res){
+                    // alert(JSON.stringify(res));
+                    if(res.changedRows!="0"){
+                        alert("修改成功,需以新密码登陆系统!");
+                        window.location.href="/logout";
+
+                    }else{
+                        alert("密码未改变,输入密码与原密码相同!");
+                    }
+                },
+                error:function(err){//这里是AJAX发生错误的处理代码
+                    // alert(JSON.stringify(err));
+                }
+            });
+
+        }
+
+    })
+
+</script>

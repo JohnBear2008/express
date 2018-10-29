@@ -1,0 +1,179 @@
+<html>
+
+
+<title>Bear Admin 登陆页面</title>
+
+<!-- Bootstrap Core CSS -->
+<link href="/theme/bootstrap/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- MetisMenu CSS -->
+<link href="/theme/bootstrap/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+<!-- Custom CSS -->
+<link href="/theme/bootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+
+<!-- Custom Fonts -->
+<link href="/theme/bootstrap/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<script type="text/javascript"  src="/funs/ajax.js"></script>
+<!-- jQuery -->
+<script src="/theme/bootstrap/vendor/jquery/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/theme/bootstrap/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="/theme/bootstrap/vendor/metisMenu/metisMenu.min.js"></script>
+
+
+</head>
+
+<body>
+<!-- /.row -->
+<div class="row">
+    <div class="col-lg-12" >
+        <div class="panel panel-default" >
+            <div class="panel-heading">
+                Basic Form Elements
+            </div>
+
+            <div class="col-lg-6 col-lg-offset-3" align="center">
+                <h1>添加程序功能</h1>
+
+
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">程序名称</span>
+                        <input id="name" type="text" class="form-control" placeholder="程序名称">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">程序url</span>
+                        <input id="url" type="text" class="form-control" placeholder="程序url">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">授权等级</span>
+                        <input id="authlevel" type="text" class="form-control" placeholder="授权等级" value="9">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">树ID  </span>
+                        <input id="treeID" type="text" class="form-control" placeholder="树等级">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">树等级  </span>
+                        <input id="treelevel" type="text" class="form-control" placeholder="初级为0,多一层依次加1" value="0">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">是否有子树</span>
+                        <input id="withCtree" type="text" class="form-control" placeholder="有填1,无填0" value="0">
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon">父树ID</span>
+                        <input id="FtreeID" type="text" class="form-control" placeholder="父树ID">
+                    </div>
+
+                        <button class='btn btn-default' id='addfunbutton' type='button'>确认添加 </button>
+                        <button class='btn btn-default' id='backbutton' type='button'>返回管理 </button>
+
+
+            </div>
+
+
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+<script>
+
+    //获取增加功能信息-----------------------
+    function getaddfuninfo() {
+        var name=$('#name').val();
+        var url=$('#url').val();
+        var authlevel=$('#authlevel').val();
+        var treeID=$('#treeID').val();
+        var treelevel=$('#treelevel').val();
+        var withCtree=$('#withCtree').val();
+        var FtreeID=$('#FtreeID').val();
+        var data={name:name,url:url,authlevel:authlevel,treeID:treeID,treelevel:treelevel,withCtree:withCtree,FtreeID:FtreeID};
+        // alert(JSON.stringify(data));
+        return data;
+    }
+
+
+    //检查是否为空---------------------
+    function checknull(val,err) {
+        if(val==""){
+            alert("错误信息:"+err);
+            return false;
+        }else{
+            // alert(JSON.stringify(val));
+            return true;
+        }
+    }
+
+
+
+    //定义按钮
+    $("#addfunbutton").click(function(){
+        var data=getaddfuninfo();
+        if(checknull(data.name,"请输入功能名")&&checknull(data.url,"请输入url")&&checknull(data.treeID,"请输入treeID")&&checknull(data.treelevel,"请输入treelevel")&&checknull(data.withCtree,"请输入withCtree")){
+            // alert(JSON.stringify(data));
+            postaddfuninfo(data);
+        }
+    })
+
+    $("#backbutton").click(function(){
+        window.location.href="admin";
+    })
+
+    //发送添加程序数据---------------------
+    function postaddfuninfo(data) {
+
+        $.ajax({
+            url:"postaddfun", //后台查询的ACTION
+            type:'post',//POST方式传递参数从前端到后台
+            dataType:'json',//数据类型为JSON
+            data:data,//传输的数据
+            success:function(res){
+                // alert(JSON.stringify(res));
+                // alert();
+                if(res.affectedRows!="0" ){
+                    alert("添加成功!");
+
+                    // if(res[0].UID=="0"){
+                    //     window.location.href="admin";
+                    // }else{
+                    //     window.location.href="users";
+                    // }
+
+
+                }else{
+                    alert("添加失败,请检查url或ID是否重复!");
+                }
+            },
+            error:function(err){//这里是AJAX发生错误的处理代码
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+
+
+
+
+</script>
+
+<script src="/theme/bootstrap/vendor/datatables/js/jquery.dataTables.min.js"></script>
+<script src="/theme/bootstrap/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+<script src="/theme/bootstrap/vendor/datatables-responsive/dataTables.responsive.js"></script>
+</body>
+
+</html>

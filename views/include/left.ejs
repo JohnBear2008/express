@@ -1,0 +1,153 @@
+<div class="navbar-default sidebar" role="navigation">
+    <div class="sidebar-nav navbar-collapse">
+        <ul class="nav" id="side-menu">
+
+            <!--<li class="sidebar-search">-->
+                <!--<div class="input-group custom-search-form">-->
+                    <!--<input type="text" class="form-control" placeholder="Search...">-->
+                    <!--<span class="input-group-btn">-->
+                                <!--<button class="btn btn-default" type="button">-->
+                                    <!--&lt;!&ndash;<i class="fa fa-search"></i>&ndash;&gt;-->
+                                    <!--搜索-->
+
+                                <!--</button>-->
+                            <!--</span>-->
+                <!--</div>-->
+                <!--&lt;!&ndash; /input-group &ndash;&gt;-->
+            <!--</li>-->
+
+
+        </ul>
+
+        <ul class="nav" id="divnav">
+
+        </ul>
+
+
+
+        <script>
+
+
+            $(function () {
+                var url="/getleftnav";
+                var treeID="";
+                var data={treelevel:"0"};
+                $.ajax({
+                    url:url, //后台查询的ACTION
+                    type:'get',//POST方式传递参数从前端到后台
+                    dataType:'json',//数据类型为JSON
+                    data:"",//传输的数据
+                    async:false,//取消异步 否则选中效果无法加载!
+                    success:function(res){
+                         // alert(JSON.stringify(res));
+                        // alert(res[0].FID);
+                        // alert(res[1].name);
+                        var i=0;
+                        while(i<res.length){
+                            // alert(res[i].treeID);
+                            // $('#side-menu').append('<li><a href="/users/'+res[i].url+'"><i class="fa fa-dashboard fa-fw"></i> '+res[i].name+'</a></li> ');
+                            if(res[i].withCtree=="1"){
+                                $('#side-menu').append('<li id="li'+res[i].treeID+'"><a href="#"><i class="fa fa-dashboard fa-fw"></i> '+res[i].name+'<span class="fa arrow"></span></a></li> ');
+                                $('#li'+res[i].treeID).append('<ul class="nav nav-second-level" id="ul'+res[i].treeID+'"></ul>');
+                                var navid="ul"+res[i].treeID;
+                                getsubnav(res[i].treeID,navid);
+
+                            }else{
+                                $('#side-menu').append('<li id="li'+res[i].treeID+'"><a href="/users/?url='+res[i].url+'&treeID='+res[i].treeID+'"><i class="fa fa-dashboard fa-fw"></i> '+res[i].name+'</a></li> ');
+
+                            }
+
+
+                            i++;
+                        }
+                        // $('#side-menu').append('<li id="testpage"><a href="/users/?url=test"><i class="fa fa-dashboard fa-fw"></i> test</a></li> ');
+                    },
+                    error:function(){//这里是AJAX发生错误的处理代码
+                        alert("系统异常！",'error');
+                    }
+
+
+                });
+
+                function getsubnav(FtreeID,navid){
+                    var url="/getsubnav";
+                    var data={FtreeID:FtreeID};
+
+                    $.ajax({
+                        url:url, //后台查询的ACTION
+                        type:'get',//POST方式传递参数从前端到后台
+                        dataType:'json',//数据类型为JSON
+                        data:data,//传输的数据
+                        async:false,//取消异步 否则选中效果无法加载!
+                        success:function(res){
+                            // alert(JSON.stringify(res));
+                            // alert(res[0].FID);
+                            // alert(res[1].name);
+                            var i=0;
+                            while(i<res.length){
+                                // alert(res[i].treeID);
+                                // $('#side-menu').append('<li><a href="/users/'+res[i].url+'"><i class="fa fa-dashboard fa-fw"></i> '+res[i].name+'</a></li> ');
+                                $('#'+navid+'').append('<li id='+res[i].treeID+'><a href="/users/?url='+res[i].url+'&treeID='+res[i].treeID+'"> '+res[i].name+'</a></li> ');
+                                i++;
+                            }
+                            // $('#side-menu').append('<li id="testpage"><a href="/users/?url=test"><i class="fa fa-dashboard fa-fw"></i> test</a></li> ');
+                        },
+                        error:function(){//这里是AJAX发生错误的处理代码
+                            alert("系统异常！",'error');
+                        }
+
+
+                    });
+
+                }
+
+
+
+
+                //--定义选中特效---------------------
+                $('#side-menu').metisMenu();
+
+
+                $(window).bind("load resize", function() {
+                    var topOffset = 50;
+                    var width = (this.window.innerWidth > 0) ? this.window.innerWidth : this.screen.width;
+                    if (width < 768) {
+                        $('div.navbar-collapse').addClass('collapse');
+                        topOffset = 100; // 2-row-menu
+                    } else {
+                        $('div.navbar-collapse').removeClass('collapse');
+                    }
+
+                    var height = ((this.window.innerHeight > 0) ? this.window.innerHeight : this.screen.height) - 1;
+                    height = height - topOffset;
+                    if (height < 1) height = 1;
+                    if (height > topOffset) {
+                        $("#page-wrapper").css("min-height", (height) + "px");
+                    }
+                });
+
+                var url = window.location;
+                var element = $('ul.nav a').filter(function() {
+                    return this.href == url;
+                }).addClass('active').parent();
+                while (true) {
+                    if (element.is('li')) {
+                        element = element.parent().addClass('in').parent();
+                    } else {
+                        break;
+                    }
+                }
+
+
+
+            })
+
+
+        </script>
+
+    </div>
+    <!-- /.sidebar-collapse -->
+</div>
+<!-- /.navbar-static-side -->
+</nav>
+

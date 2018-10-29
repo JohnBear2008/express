@@ -1,0 +1,300 @@
+<html>
+
+
+<title>Bear Admin 登陆页面</title>
+
+<!-- Bootstrap Core CSS -->
+<link href="/theme/bootstrap/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- MetisMenu CSS -->
+<link href="/theme/bootstrap/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+<!-- Custom CSS -->
+<link href="/theme/bootstrap/dist/css/sb-admin-2.css" rel="stylesheet">
+
+<!-- Custom Fonts -->
+<link href="/theme/bootstrap/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+<script type="text/javascript"  src="/funs/ajax.js"></script>
+<!-- jQuery -->
+<script src="/theme/bootstrap/vendor/jquery/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/theme/bootstrap/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="/theme/bootstrap/vendor/metisMenu/metisMenu.min.js"></script>
+<!-- 验证码 -->
+<script type="text/javascript"  src="/js/gVerify.js"></script>
+</head>
+
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="login-panel panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">请先登陆系统</h3>
+                </div>
+                <div class="panel-body">
+                    <form role="form">
+                        <fieldset>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="账号" name="account" id="account" type="input" autofocus>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="密码" name="password" id="password" type="password" value="">
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <div id="v_container" style="width: 200px;height: 50px;"></div>
+                                点击图片可刷新验证码
+                            </div>
+
+                            <div class="form-group">
+                            <input class="form-control" type="text"  id="code_input" value="" placeholder="请输入验证码"/>
+                            </div>
+
+                            <div class="checkbox">
+                                <label>
+                                    <input name="remember" id="remember" type="checkbox" value="true">记住账号密码
+                                </label>
+                            </div>
+                            <!-- Change this to a button or input when using this as a form -->
+                            <a id="loginbutton" class="btn btn-lg btn-success btn-block" type="button">登陆</a>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var verifyCode = new GVerify("v_container");
+    // document.getElementById("my_button").onclick = function(){
+    //     var res = verifyCode.validate(document.getElementById("code_input").value);
+    //     if(res){
+    //         alert("验证正确");
+    //     }else{
+    //         alert("验证码错误");
+    //     }
+    // }
+
+    // alert(document.cookie);
+    // dbselect();
+
+    //读取cookies
+    function getCookie(name)
+    {
+        var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+        return (arr=document.cookie.match(reg))?unescape(arr[2]):null;
+    }
+
+
+
+    //删除cookies
+    function delCookie(name){
+        var exp = new Date();
+        exp.setTime(exp.getTime() - 1);
+        var cval=getCookie(name);
+        if(cval!=null){
+            document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+        }
+    }
+
+    var cookie=getCookie("account");
+    if(cookie!=null){
+        var cookiejson=$.parseJSON(getCookie("account").substring(2));//去掉cookie前部J: 在转换为JSON
+        // alert(cookie);
+        if(cookiejson.remember=="true"){
+            $('#account').val(cookiejson.account);
+            $('#password').val(cookiejson.password);
+            $('#remember').attr('checked',true);
+        }
+
+    }
+
+
+
+
+    // alert(cookie.remember);
+
+
+
+
+    //获取登陆信息-----------------------
+    function getlogininfo() {
+        var account=$('#account').val();
+        var password=$('#password').val();
+        var remember=$("input[type='checkbox']").is(':checked');
+        var data={account:account,password:password,remember:remember};
+        // alert(JSON.stringify(data));
+        return data;
+    }
+    // getlogininfo();
+    //检查是否为空---------------------
+    function checknull(val,err) {
+        if(val==""){
+            alert("错误信息:"+err);
+            return false;
+        }else{
+            // alert(JSON.stringify(val));
+            return true;
+        }
+    }
+    
+    //检查数据-----------------
+    
+    //发送数据---------------------
+    function postlogininfo(data) {
+
+        $.ajax({
+            url:"postlogin", //后台查询的ACTION
+            type:'post',//POST方式传递参数从前端到后台
+            dataType:'json',//数据类型为JSON
+            data:data,//传输的数据
+            success:function(res){
+                // alert(JSON.stringify(res));
+                // alert(res[0].UID);
+                if(res !=null  && res !="" ){
+                    alert("登录成功!");
+
+                    if(res[0].UID=="0"){
+                        window.location.href="admin";
+                    }else{
+                        window.location.href="users";
+                    }
+
+
+                }else{
+                    alert("用户名或密码错误,请检查!");
+                }
+            },
+            error:function(err){//这里是AJAX发生错误的处理代码
+                // alert(JSON.stringify(err));
+            }
+        });
+    }
+
+
+
+    //定义按钮
+    $("#loginbutton").click(function(){
+        var data=getlogininfo();
+        if(checknull(data.account,"请输入账号")&&checknull(data.password,"请输入密码")){
+            var res = verifyCode.validate($('#code_input').val());
+            if(res){
+
+                postlogininfo(data);
+            }else{
+                alert("验证码错误");
+                $('#code_input').val("");
+                $('#code_input').focus();
+            }
+            // alert(JSON.stringify(data));
+        }
+    })
+
+    //定义按enter件登陆
+//给所有input绑定
+    $(":input").keydown(function (e) {
+        if(e.keyCode==13){
+            var data=getlogininfo();
+            if(checknull(data.account,"请输入账号")&&checknull(data.password,"请输入密码")){
+
+
+                var res = verifyCode.validate($('#code_input').val());
+                if(res){
+
+                    postlogininfo(data);
+                }else{
+                    alert("验证码错误");
+                    $('#code_input').val("");
+                    $('#code_input').focus();
+                }
+                // alert(JSON.stringify(data));
+
+            }
+        }
+    })
+
+
+
+    // $("#account").keydown(function (e) {
+    //     if(e.keyCode==13){
+    //         var data=getlogininfo();
+    //         if(checknull(data.account,"请输入账号")&&checknull(data.password,"请输入密码")){
+    //
+    //
+    //             var res = verifyCode.validate($('#code_input').val());
+    //                 if(res){
+    //
+    //                     postlogininfo(data);
+    //                 }else{
+    //                     alert("验证码错误");
+    //                     $('#code_input').val("");
+    //                     $('#code_input').focus();
+    //                 }
+    //             // alert(JSON.stringify(data));
+    //
+    //         }
+    //     }
+    // })
+
+    // $("#password").keydown(function (e) {
+    //     if(e.keyCode==13){
+    //         var data=getlogininfo();
+    //         if(checknull(data.account,"请输入账号")&&checknull(data.password,"请输入密码")){
+    //             var res = verifyCode.validate($('#code_input').val());
+    //             if(res){
+    //
+    //                 postlogininfo(data);
+    //             }else{
+    //                 alert("验证码错误");
+    //                 $('#code_input').val("");
+    //                 $('#code_input').focus();
+    //             }
+    //             // alert(JSON.stringify(data));
+    //         }
+    //     }
+    // })
+    //
+    //
+    // $("#code_input").keydown(function (e) {
+    //     if(e.keyCode==13){
+    //         var data=getlogininfo();
+    //         if(checknull(data.account,"请输入账号")&&checknull(data.password,"请输入密码")){
+    //             var res = verifyCode.validate($('#code_input').val());
+    //             if(res){
+    //
+    //                 postlogininfo(data);
+    //             }else{
+    //                 alert("验证码错误");
+    //                 $('#code_input').val("");
+    //                 $('#code_input').focus();
+    //             }
+    //             // alert(JSON.stringify(data));
+    //         }
+    //     }
+    // })
+
+
+    
+</script>
+
+
+</body>
+
+</html>
