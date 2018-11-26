@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var db=require("../bin/db/db");
-
+var db2=require("../bin/db/db2");
 
 /* test */
 router.get('/1', function(req, res, next) {
@@ -121,6 +121,34 @@ router.get('/getfunctions', function(req, res, next) {
         });
     }
 });
+
+
+//双数据库链接测试
+router.get('/db1', function(req, res, next) {
+  
+        db.query('select * from functions ',"",function(results,fields){
+            res.send(results);
+        });
+   
+});
+
+router.get('/db2', function(req, res, next) {
+	  
+	db2.sql('select * from dbo.Users',function(err,result){
+		if (err) {
+			console.log(err);
+			return;
+		}
+		console.log('用户总数为 :',result);
+		
+		res.send(result);
+		
+	});
+
+});
+
+
+
 //加载update功能原始数据
 router.get('/getupdfun', function(req, res, next) {
 

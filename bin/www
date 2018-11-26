@@ -11,11 +11,11 @@ var http = require('http');
 var apps = require('../app');
 var https = require('https');
 var fs = require('fs');
-// //读入密钥和证书文件
-var privatekey = fs.readFileSync('cert/server_no_passwd.key', 'utf8');
-var certificate = fs.readFileSync('cert/server.crt', 'utf8');
+// //璇诲叆瀵嗛挜鍜岃瘉涔︽枃浠�
+var privatekey = fs.readFileSync('bin/cert/server_no_passwd.key', 'utf8');
+var certificate = fs.readFileSync('bin/cert/server.crt', 'utf8');
 
-//构造https服务器选项
+//鏋勯�爃ttps鏈嶅姟鍣ㄩ�夐」
 
 var options={key:privatekey, cert:certificate};
 https.createServer(options, apps).listen(3008, function () {
